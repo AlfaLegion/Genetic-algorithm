@@ -63,10 +63,10 @@ double Decoder(TConstraints& cnstr,TBits bits)
 
 int main()
 {
-	vector<pair<double, double>> constraints; // ограничения на переменные
-	vector<int> count_genes; // количество генов 
+	vector<pair<double, double>> constraints;
+	vector<int> count_genes;
 	vector<double> valuesFunction;
-	vector<vector<short>> population;// популяция
+	vector<vector<short>> population;
 	double eps = 100000;
 	size_t countVariables = 2;
 
@@ -106,7 +106,7 @@ int main()
 	while (iteration < 10000)
 	{
 
-		// Вычисление значения функции пригодности хромосом
+		// Calculating the chromosome fitness function value
 		for (const auto& x : population)
 		{
 			vector<double> vals;
@@ -122,7 +122,7 @@ int main()
 		}
 
 
-		//СЕЛЕКЦИЯ
+		//SELECTION
 		vector<double> Probab;
 		double SharedFunctionRez = 0;
 		auto ItMinValue = min_element(valuesFunction.cbegin(), valuesFunction.cend());
@@ -131,18 +131,18 @@ int main()
 			SharedFunctionRez += x - (*ItMinValue);
 		}
 
-		//вероятность отбора
+		//probability of selection
 		for (size_t i = 0; i < valuesFunction.size(); ++i)
 		{
 			Probab.emplace_back((valuesFunction[i] - (*ItMinValue)) / SharedFunctionRez);
 		}
 
-		//совокупная вероятность
+		//cumulative probability
 		for (size_t i = 1; i < Probab.size(); ++i)
 		{
 			Probab[i] += Probab[i - 1];
 		}
-		// рулетка
+		// roulette
 		uniform_real_distribution<double> urd(0, 1);
 		random_device rd;
 		vector<vector<short>>buff_population;
@@ -164,7 +164,7 @@ int main()
 		if (!buff_population.empty())
 			population = move(buff_population);
 
-		//КРОССИНГОВЕР
+		//CROSSING OVER
 		size_t PointCross;
 		double ProbabilityCross = 0.5;
 		stack<size_t> index;
@@ -197,7 +197,7 @@ int main()
 			index.pop();
 		}
 
-		//МУТАЦИЯ
+		//MUTATION
 
 		double ProbabMutation = 0.01;
 		for (size_t i = 0; i < population.size(); ++i)
